@@ -3,7 +3,7 @@
 </svelte:head>
 
 <script>
-  const itemIds = [..."ABCDEFGHI".split("")];
+  const itemIds = "ABCDEFGHI".split("");
   const _$items = {};
 
   const centerItem = (id) => {
@@ -19,7 +19,7 @@
 
     const diff_x = wrpOff_x - itmRect.left;
  
-    _$wrapper.style.transform = `translate(${centerOff_x + diff_x}px, 0)`;
+    _$wrapper.style.transform = `translate(${centerOff_x + diff_x}px, 0) scale(2)`;
   }
 
 </script>

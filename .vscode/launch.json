@@ -9,7 +9,7 @@
       "request": "launch",
       "reAttach": true,
       "name": "Firefox",
-      "url": "http://localhost:5000/test2",
+      "url": "http://localhost:5000/",
       "webRoot": "${workspaceFolder}",
       "pathMappings": [
         {
@@ -26,7 +26,7 @@
       "type": "pwa-chrome",
       "request": "launch",
       "name": "Chrome",
-      "url": "http://localhost:5000/test2",
+      "url": "http://localhost:5000/",
       "webRoot": "${workspaceFolder}"
     }
   ]
