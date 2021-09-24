@@ -1,5 +1,5 @@
 <svelte:head>
-  <title>USE REM</title>
+  <title>ZOOM & CENTER XY (REM)</title>
 </svelte:head>
 
 <script>

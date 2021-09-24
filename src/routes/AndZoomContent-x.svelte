@@ -1,5 +1,5 @@
 <svelte:head>
-  <title>Test 2</title>
+  <title>CENTER X</title>
 </svelte:head>
 
 <script>

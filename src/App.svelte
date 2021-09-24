@@ -10,13 +10,5 @@
 <Router url="{url}">
 	<Route path="/">
 		<AndZoomContent />
-	</Route>¨
-
-	<Route path="test-move-content">
-		<MoveContent />
-	</Route>
-
-	<Route path="test-move-canvas">
-		<MoveCanvas />
 	</Route>
 </Router>
