@@ -3,24 +3,7 @@
 </svelte:head>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const _$coordX = document.querySelector("#coordX .display");
-    const _$coordY = document.querySelector("#coordY .display");
-
-    document.body.addEventListener("mousemove",
-      (e) => {
-        _$coordX.innerHTML = e.clientX;
-        _$coordY.innerHTML = e.clientY;
-
-      }
-    );
-
-    document.body.addEventListener("mouseleave",
-      () => {
-        _$coordX.innerHTML = _$coordY.innerHTML = "-";
-      }
-    );
-  });
+  import MouseCoordinates from "../components/dev/MouseCoords.svelte";
 
   const itemIds = "ABCDEFGHIJKLMOPQRSTUVWXYZ".split("");
   const _$items = {};
@@ -61,16 +44,7 @@
 </script>
 
 <main>
-  <div class="coordinates">
-    <div id="coordX">
-      <div>x</div>
-      <span class="display">0</span>
-    </div>
-    <div id="coordY">
-      <div>y</div>
-      <span class="display">0</span>
-    </div>
-  </div>
+  <MouseCoordinates />
 
   <section class="Content">
     
@@ -98,24 +72,6 @@
 </main>
 
 <style>
-  .coordinates {
-    position: absolute;
-    font-size: 2vmin;
-    padding: 2vmin;
-    width: 10vw;
-    display: flex;
-  }
-  .coordinates > * {
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 50%;
-    text-align: center;
-    display: flex;
-  }
-  .coordinates .display {
-    margin-left: .5vmin;
-  }
-
   :root {
     font-size: 1vmin;
   }

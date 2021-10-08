@@ -1,40 +1,20 @@
 <svelte:head>
-  <title>ZOOM & CENTER XY </title>
+  <title>CENTER X</title>
 </svelte:head>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const _$coordX = document.querySelector("#coordX .display");
-    const _$coordY = document.querySelector("#coordY .display");
-
-    document.body.addEventListener("mousemove",
-      (e) => {
-        _$coordX.innerHTML = e.clientX;
-        _$coordY.innerHTML = e.clientY;
-
-      }
-    );
-
-    document.body.addEventListener("mouseleave",
-      () => {
-        _$coordX.innerHTML = _$coordY.innerHTML = "-";
-      }
-    );
-  });
+  import MouseCoordinates from "../components/dev/MouseCoords.svelte";
 
   const itemIds = "ABCDEFGHI".split("");
   const _$items = {};
   let scale = 1;
 
   $: if (Object.keys(_$items).length > 0) {
-    const {clientWidth: wrpr_w, clientHeight: wrpr_h} = document.body;
+    const wrpr_w = document.querySelector(".WrapperItems").getBoundingClientRect().width;
 
     Object.values(_$items).forEach(_$item => {
-      const { x, y, width, height } = _$item.getBoundingClientRect();
-      _$item.dataset.x = (x + width / 2) / wrpr_w;
-      _$item.dataset.y = (y + height / 2) / wrpr_h;
-      console.log("wrpr w", wrpr_w);
-      console.log("wrpr h", wrpr_h);
+      const {left, width} = _$item.getBoundingClientRect();
+      _$item.dataset.left = (left + width / 2) / wrpr_w;
     });
   }
 
@@ -43,34 +23,24 @@
     const _$wrpr = document.querySelector(".WrapperItems");
     const _$itm = _$items[id];
 
-    const { x: itmOff_x, y: itmOff_y } = _$itm.dataset;
+    const itmOff_l = _$itm.dataset.left;
 
-    const { width: wrpr_w, height: wrpr_h } = _$wrpr.getBoundingClientRect();
-    const { width: view_w, height: view_h } = _$content.getBoundingClientRect();
-    // const view_w = _$content.clientWidth;
-    // const view_h = _$content.clientHeight;
+    const wrpr_w = _$wrpr.getBoundingClientRect().width;
+    const view_w = _$content.clientWidth;
 
-    const diff_x = (view_w / 2) - (itmOff_x * wrpr_w) / scale;
-    const diff_y = (view_h / 2) - (itmOff_y * view_h) / scale;
+    const diff = (view_w / 2) - (itmOff_l * wrpr_w) / scale;
+    const trnsCntr = view_w / 2;
 
     scale += 0.8;
 
-    _$wrpr.style.transform = `scale(${scale}) translate(${diff_x}px, ${diff_y}px)`;
+    _$wrpr.style.transform = `scale(${scale}) translate(${diff}px)`;
+    _$wrpr.style.transformOrigin = `${trnsCntr}px center`;
   }
 
 </script>
 
 <main>
-  <div class="coordinates">
-    <div id="coordX">
-      <div>x</div>
-      <span class="display">0</span>
-    </div>
-    <div id="coordY">
-      <div>y</div>
-      <span class="display">0</span>
-    </div>
-  </div>
+  <MouseCoordinates />
 
   <section class="Content">
     
@@ -98,24 +68,6 @@
 </main>
 
 <style>
-  .coordinates {
-    position: absolute;
-    font-size: 2vmin;
-    padding: 2vmin;
-    width: 10vw;
-    display: flex;
-  }
-  .coordinates > * {
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 50%;
-    text-align: center;
-    display: flex;
-  }
-  .coordinates .display {
-    margin-left: .5vmin;
-  }
-
   :root {
     font-size: 1vmin;
   }
@@ -127,7 +79,6 @@
     justify-content: space-between;
     flex-direction: column;
     height: 100vh;
-    box-sizing: border-box;
   }
 
   .Item {
@@ -168,8 +119,8 @@
 
   .WrapperItems {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
+    display: flex;
+    flex-direction: row;
     gap: 20rem;
     transition: transform 400ms, width 400ms, height 400ms;
   }
@@ -193,7 +144,6 @@
     background-color: transparent;
     border: 1px solid turquoise;
     color: turquoise;
-    background-color: black;
   }
 
 </style>
