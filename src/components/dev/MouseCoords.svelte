@@ -1,16 +1,18 @@
 <script>
-  export let color = "white";
+  export let color = "black";
   let _$coordX, _$coordY;
   const cssVariables = `--color: ${color}`;
 
-  document.body.addEventListener("mousemove",
+  document.body.addEventListener(
+    "mousemove",
     (e) => {
       _$coordX.innerHTML = e.clientX;
       _$coordY.innerHTML = e.clientY;
     }
   );
 
-  document.body.addEventListener("mouseleave",
+  document.body.addEventListener(
+    "mouseleave",
     () => {
       _$coordX.innerHTML = _$coordY.innerHTML = "-";
     }
@@ -33,7 +35,7 @@
     position: absolute;
     font-size: 2vmin;
     padding: 2vmin;
-    width: 10vw;
+    width: 20vmin;
     display: flex;
     color: var(--color);
   }

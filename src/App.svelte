@@ -1,20 +1,19 @@
 <script>
-  import { Router, Route } from "svelte-routing";
-	import Polygons from "./routes/Polygons.svelte";
-	import MoveXYZ_rem from "./routes/MoveXYZ-rem.svelte";
-	import MoveXYZ from "./routes/MoveXYZ.svelte";
-	import MoveXZ from "./routes/MoveXZ.svelte";
-
-
+	import {Router, Route} from "svelte-routing";
+	import Lp21 from "./routes/lp21.svelte";
+	import Construction from "./routes/construction.svelte";
+	import Units from "./routes/units.svelte";
   export let url = "";
 </script>
 
 <Router url="{url}">
-	<Route path="/">
-		<Polygons />
+	<Route path="/planets">
+		<Construction />
 	</Route>
-
-	<Route path="/xyz-rem">
-		<MoveXYZ_rem />
+	<Route path="/units">
+		<Units />
+	</Route>
+	<Route path="/">
+		<Lp21 />
 	</Route>
 </Router>
