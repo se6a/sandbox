@@ -20,3 +20,8 @@ div,
 span {
   box-sizing: border-box;
 }
+
+button {
+  margin: 0;
+  padding: 0;
+}

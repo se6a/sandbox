@@ -1,108 +1,62 @@
 <script>
-  import CenterMarker from "./dev/CenterMarker.svelte";
   import Planet from "./Planet.svelte";
-  import Kompetenzbereich from "./Kompetenzbereich.svelte";
+  import Flower2 from "./Flower-2.svelte";
+  import Flower3 from "./Flower-3.svelte";
+  import Flower4 from "./Flower-4.svelte";
+  import Flower5 from "./Flower-5.svelte";
+  import Flower6 from "./Flower-6.svelte";
 
-  export let fill = "white";
-  export let pos = [0, 0];
-  export let size = 50;
-  export let onclick = null;
-  export let _$fachbereich;
+  export let level = 0;
+  export let rotator = null;
+  export let rotation = 0;
 
-  const _$corners = [];
-
-  const coords = [
-    {x: 47.63, y: 3.64},
-    {x: 90.94, y: 28.65},
-    {x: 90.94, y: 78.67},
-    {x: 47.63, y: 103.68},
-    {x: 4.31, y: 78.67},
-    {x: 4.31, y: 28.65}
+  export const kmpBereiche = [
+    { id: 1, name: "komp 1", active: false },
+    { id: 2, name: "komp 2", active: false },
+    { id: 3, name: "komp 3", active: false },
+    { id: 4, name: "komp 4", active: false },
+    { id: 5, name: "komp 5", active: false },
   ];
 
-  const cssVariables = `
-    --fill: ${fill};
-    --left: ${pos[0]}vmin;
-    --top: ${pos[1]}vmin;
-    --size: ${size}vmin;
-    --rotationTime: ${100 + Math.round(Math.random() * 100)}s;
-  `;
+  function handleClick(e, target, _$target) {
+    if (level === 0) {
+      level++;
+    } else if (level === 1 && target === "satelite") {
+      level++;
+      rotator.stop();
+      const angle = parseInt(
+        _$target.style.transform.match(/rotate\((\d+)deg\)/)?.[1] || 0
+      );
 
-  const clickHandler = (_$corner) => {
-    if (typeof(onclick) === "function") {
-      onclick(_$fachbereich, _$corner);
+      console.log(angle, rotation);
+      rotator.set(-1 * angle + 45);
     }
-  };
-
-  const kmpbs = Math.round(Math.random() * 4 + 2);
-
+  }
 </script>
 
-<div
-  class="fachbereich"
-  bind:this={_$fachbereich}
-  data-size="{size}"
-  data-posx="{pos[0]}"
-  data-posy="{pos[1]}"
-  style={cssVariables}
-  on:click={clickHandler}
->
-  <Planet
-    containerSize={100}
-    planetPadding={10}
-  >
-    <div
-      class="satelites"
-      slot="satelites"
-    >
-      {#each {length: kmpbs} as _, i}
-        <Kompetenzbereich />
-      {/each}
-    </div>
-  </Planet>
-</div>
+<Planet planetPadding={10} {rotation} onClick={handleClick}>
+  <svelte:fragment slot="planet">
+    <Flower5 />
+  </svelte:fragment>
+
+  <div class="satelites" slot="satelites">
+    {#each kmpBereiche as kmp (kmp.id)}
+      <div on:click={() => (kmp.active = true)}>
+        <Planet>
+          <svelte:fragment slot="planet">
+            <Flower3 />
+            <div style="position: absolute;">{kmp.id}</div>
+          </svelte:fragment>
+          <div class="satelites" slot="satelites">
+            <div>1</div>
+            <div>4</div>
+            <div>3</div>
+          </div>
+        </Planet>
+      </div>
+    {/each}
+  </div>
+</Planet>
 
 <style>
-  .fachbereich {
-    width: var(--size);
-    height: var(--size);
-    position: absolute;
-    left: var(--left);
-    top: var(--top);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 1000ms;
-    transform-origin: center;
-  }
-
-  :global(.fachbereich > .PlanetContainer) {
-    animation-name: rotate;
-    animation-duration: var(--rotationTime);
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-  :global(.kompetenzbereich > .PlanetContainer) {
-    animation-name: rotate;
-    animation-duration: 25s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-
-  @keyframes rotate {
-    from {transform: rotate(0deg)}
-    to {transform: rotate(360deg)}
-  }
-
-  .svgPath1 {
-    fill: var(--fill);
-  }
-
-  .fachbereichIcon {
-    border: 1px dotted white;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
 </style>

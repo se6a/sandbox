@@ -1,13 +1,14 @@
 <script>
   import CenterMarker from "./dev/CenterMarker.svelte";
   import Planet from "./Planet.svelte";
+  import Kompetenzbereich from "./Kompetenzbereich.svelte";
 
   export let fill = "white";
   export let pos = [0, 0];
   export let size = 50;
   export let onclick = null;
+  export let _$fachbereich;
 
-  let _$fachbereich;
   const _$corners = [];
 
   const coords = [
@@ -21,8 +22,8 @@
 
   const cssVariables = `
     --fill: ${fill};
-    --left: ${pos[0]}vw;
-    --top: ${pos[1]}vh;
+    --left: ${pos[0]}vmin;
+    --top: ${pos[1]}vmin;
     --size: ${size}vmin;
     --rotationTime: ${100 + Math.round(Math.random() * 100)}s;
   `;
@@ -33,24 +34,30 @@
     }
   };
 
+  const kmpbs = Math.round(Math.random() * 4 + 2);
+
 </script>
 
-<div class="fachbereich" bind:this={_$fachbereich} data-size="{size}" data-posx="{pos[0]}" data-posy="{pos[1]}" style={cssVariables}>
-  <Planet containerSize={size} planetPadding={3}>
-    <div class="satelites" slot="satelites">
-
-      {#each {length: 5} as _, i}
-        <div>
-          <Planet containerSize={3} planetPadding={1}>
-            <div class="satelites" slot="satelites">
-              {#each {length: 3} as _, i}
-                <div class="kompetenz">i</div>
-              {/each}
-            </div>
-          </Planet>
-        </div>
+<div
+  class="fachbereich"
+  bind:this={_$fachbereich}
+  data-size="{size}"
+  data-posx="{pos[0]}"
+  data-posy="{pos[1]}"
+  style={cssVariables}
+  on:click={clickHandler}
+>
+  <Planet
+    containerSize={100}
+    planetPadding={10}
+  >
+    <div
+      class="satelites"
+      slot="satelites"
+    >
+      {#each {length: kmpbs} as _, i}
+        <Kompetenzbereich />
       {/each}
-
     </div>
   </Planet>
 </div>
@@ -62,7 +69,6 @@
     position: absolute;
     left: var(--left);
     top: var(--top);
-    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,9 +76,15 @@
     transform-origin: center;
   }
 
-  .fachbereich > svg {
+  :global(.fachbereich > .PlanetContainer) {
     animation-name: rotate;
     animation-duration: var(--rotationTime);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  :global(.kompetenzbereich > .PlanetContainer) {
+    animation-name: rotate;
+    animation-duration: 25s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
@@ -92,9 +104,5 @@
     height: 100%;
     justify-content: center;
     align-items: center;
-  }
-
-  .kompetenz {
-    background-color: blue;
   }
 </style>
