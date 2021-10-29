@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 82">
+<svg
+  class="Flower-3 flower"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 90 82"
+>
   <defs>
     <style>
       .cls-1 {
@@ -15,3 +19,9 @@
     </g>
   </g>
 </svg>
+
+<style>
+  .flower {
+    height: 83%;
+  }
+</style>
