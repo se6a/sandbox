@@ -1,24 +1,24 @@
 <script>
-  export let level = 0;
+  import { level } from "../stores";
 </script>
 
 <header class="header">
   <div class="logo">LP21</div>
   <navigation class="navigation">
-    <button class="navView-1" on:click={() => (level = 0)}>level 0</button>
+    <button class="navView-1" on:click={() => ($level = 0)}>level 0</button>
 
     <button
       class="navView-2"
-      style="width: {level >= 1 ? '100%' : 0}"
-      on:click={() => (level = 1)}
+      style="width: {$level >= 1 ? '100%' : 0}"
+      on:click={() => ($level = 1)}
     >
       level 1
     </button>
 
     <button
       class="navView-2"
-      style="width: {level >= 2 ? '100%' : 0}"
-      on:click={() => (level = 2)}
+      style="width: {$level >= 2 ? '100%' : 0}"
+      on:click={() => ($level = 2)}
     >
       level 2
     </button>
@@ -28,9 +28,10 @@
 <style>
   .header {
     height: 6vmin;
+    width: 100%;
     display: flex;
-    z-index: 30;
-    position: relative;
+    z-index: 100;
+    position: fixed;
   }
 
   .logo {
