@@ -1,9 +1,30 @@
+<script context="module">
+  import Flower_2 from "../components/Flower-2.svelte";
+  import Flower_3 from "../components/Flower-3.svelte";
+  import Flower_4 from "../components/Flower-4.svelte";
+  import Flower_5 from "../components/Flower-5.svelte";
+  import Flower_6 from "../components/Flower-6.svelte";
+
+  const Flowers = {
+    2: Flower_2,
+    3: Flower_3,
+    4: Flower_4,
+    5: Flower_5,
+    6: Flower_6,
+  };
+</script>
+
 <script>
   import Flower from "../components/Flower-6.svelte";
   import Kompetenzbereich from "../components/Kompetenzbereich.svelte";
   import { level, crntFB } from "../stores";
 
+  export let title = "";
+  export let data = {};
   export let cssVariables = "";
+  export let position = [0, 0];
+
+  const kompetenzbereiche = Object.keys(data).splice(0, 5); // LIMIT FOR NOW
 
   const THIS = {
     $body: null,
@@ -12,43 +33,55 @@
     $circle_3: null,
     $intersectionPoint_1: null,
     $intersectionPoint_2: null,
+    data,
   };
 
   function clickHandler() {
     if ($level === 0) {
       $level++;
+      removeFocusClass($crntFB?.$body);
       crntFB.set(THIS);
+      addFocusClass(THIS.$body);
     }
   }
 
-  const kompetenzbereiche = [
-    { color: "tomato" },
-    { color: "green" },
-    { color: "gold" },
-    { color: "silver" },
-    { color: "blue" },
-    { color: "orange" },
-  ];
+  function addFocusClass(_$) {
+    _$?.classList.toggle("--inFocus", true);
+  }
+
+  function removeFocusClass(_$) {
+    _$?.classList.toggle("--inFocus", false);
+  }
+
+  const cssVariablesLocal = `
+    --color: silver;
+    --posX: ${position[0]};
+    --posY: ${position[1]};
+  `;
 </script>
 
 <div
-  class="container"
+  class="fachbereich body"
   bind:this={THIS.$body}
   on:click={clickHandler}
-  style={cssVariables}
+  style="{cssVariables}{cssVariablesLocal}"
 >
   <div class="circle Circle-1" bind:this={THIS.$circle_1}>
     <div class="circle Circle-2" bind:this={THIS.$circle_2}>
-      {#each kompetenzbereiche as kompetenzbereich, i}
+      {#each kompetenzbereiche as kb, i}
         <Kompetenzbereich
-          {kompetenzbereich}
+          title={kb}
+          data={data[kb]}
           {i}
           angle={(360 / kompetenzbereiche.length) * i}
         />
       {/each}
     </div>
     <div class="circle Circle-3" bind:this={THIS.$circle_3}>
-      <Flower />
+      <div class="fachbereichTitle">
+        {title}
+      </div>
+      <svelte:component this={Flowers[kompetenzbereiche.length]} />
     </div>
   </div>
 
@@ -105,16 +138,21 @@
     transform: rotate(90deg);
   }
 
-  .container {
+  .body {
     width: var(--size);
     height: var(--size);
+    left: var(--posX);
+    top: var(--posY);
     position: absolute;
     display: flex;
     transition: width var(--transTime), height var(--transTime),
-      transform var(--transTime);
+      transform var(--transTime), opacity var(--transTime);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 0;
   }
 
-  .container::after {
+  .body::after {
     content: "";
     height: 100%;
     width: 100%;
@@ -155,5 +193,29 @@
     top: calc((100% - var(--d-3)) / 2);
     left: calc((100% - var(--d-3)) / 2);
     z-index: 10;
+    display: flex;
+  }
+
+  .Circle-3 > * {
+    position: absolute;
+  }
+
+  .fachbereichTitle {
+    font-size: calc(var(--size) / 15);
+    transition: font-size 1500ms;
+    align-self: center;
+    justify-self: center;
+  }
+
+  :global([data-level="0"]) .fachbereich,
+  :global([data-level="1"] .fachbereich.--inFocus),
+  :global([data-level="2"] .fachbereich.--inFocus) {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  :global([data-level="1"] .fachbereich.--inFocus),
+  :global([data-level="2"] .fachbereich.--inFocus) {
+    z-index: 1;
   }
 </style>

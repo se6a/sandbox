@@ -1,11 +1,15 @@
 <script>
   import { Router, Route } from "svelte-routing";
-  import Construction from "./routes/construction.svelte";
+  import Lp21 from "./routes/lp21.svelte";
+  // import DataStructure from "./routes/buildData.svelte";
   export let url = "";
 </script>
 
 <Router {url}>
+  <!-- <Route path="/build-data">
+    <DataStructure />
+  </Route> -->
   <Route path="/">
-    <Construction />
+    <Lp21 />
   </Route>
 </Router>
